@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solicitar cotización · Arte y Publicidad E&amp;D</title>
+  <meta name="description" content="Formulario guiado en 4 pasos para pedir tu cotización.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body data-page="cotizar">
+  <div id="site-header"></div>
+
+  <main id="contenido" tabindex="-1" class="container py-4">
+    <nav aria-label="Ruta de navegación"><ol class="breadcrumb small"><li class="breadcrumb-item"><a href="index.html">Inicio</a></li><li class="breadcrumb-item active" aria-current="page">Cotizar</li></ol></nav>
+    <h1 class="h2 mb-1">Pide tu cotización</h1>
+    <p class="text-muted mb-4">Solo toma unos minutos. Los campos con <span class="required"></span> son obligatorios.</p>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div id="vista-form">
+          <ol class="stepper" id="stepper" aria-label="Pasos del formulario">
+            <li><span class="dot">1</span>Tus datos</li>
+            <li><span class="dot">2</span>Tu pedido</li>
+            <li><span class="dot">3</span>Detalles</li>
+            <li><span class="dot">4</span>Resumen</li>
+          </ol>
+
+          <div class="alert alert-danger d-none" id="errores" role="alert" tabindex="-1"></div>
+          <div class="alert alert-info d-none" id="aviso-fecha"></div>
+
+          <form id="form-cotizar" novalidate autocomplete="on">
+            <!-- PASO 1 -->
+            <section data-step="1" aria-labelledby="t1">
+              <h2 class="h4 mb-3" id="t1">Paso 1 de 4 · Tus datos</h2>
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label required" for="nombres">Nombres</label>
+                  <input class="form-control" id="nombres" name="nombres" autocomplete="given-name" required aria-describedby="e-nombres"><div class="invalid-feedback" id="e-nombres">Escribe tus nombres.</div></div>
+                <div class="col-md-6"><label class="form-label required" for="apellidos">Apellidos</label>
+                  <input class="form-control" id="apellidos" name="apellidos" autocomplete="family-name" required aria-describedby="e-apellidos"><div class="invalid-feedback" id="e-apellidos">Escribe tus apellidos.</div></div>
+                <div class="col-12"><label class="form-label" for="organizacion">Organización o negocio <span class="text-muted fw-normal">(opcional)</span></label>
+                  <input class="form-control" id="organizacion" name="organizacion" autocomplete="organization"></div>
+                <div class="col-md-6"><label class="form-label" for="telefono">Teléfono o WhatsApp</label>
+                  <input class="form-control" id="telefono" name="telefono" type="tel" inputmode="numeric" autocomplete="tel" placeholder="9XX XXX XXX" aria-describedby="h-contacto e-telefono"><div class="invalid-feedback" id="e-telefono">Ingresa un número de 9 dígitos que empiece con 9.</div></div>
+                <div class="col-md-6"><label class="form-label" for="correo">Correo electrónico</label>
+                  <input class="form-control" id="correo" name="correo" type="email" autocomplete="email" aria-describedby="h-contacto e-correo"><div class="invalid-feedback" id="e-correo">Escribe un correo válido, por ejemplo nombre@correo.com.</div></div>
+                <div class="col-12"><p class="form-text mb-0" id="h-contacto">Necesitamos al menos un medio de contacto: teléfono o correo.</p></div>
+              </div>
+            </section>
+
+            <!-- PASO 2 -->
+            <section data-step="2" hidden aria-labelledby="t2">
+              <h2 class="h4 mb-3" id="t2">Paso 2 de 4 · Tu pedido</h2>
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label required" for="servicio">Tipo de servicio</label>
+                  <select class="form-select" id="servicio" name="servicio" required aria-describedby="e-servicio"><option value="">Elige una opción</option></select>
+                  <div class="invalid-feedback" id="e-servicio">Elige un tipo de servicio.</div></div>
+                <div class="col-md-3"><label class="form-label required" for="cantidad">Cantidad</label>
+                  <input class="form-control" id="cantidad" name="cantidad" type="number" min="1" max="100000" value="1" required aria-describedby="e-cantidad"><div class="invalid-feedback" id="e-cantidad">Ingresa una cantidad de 1 o más.</div></div>
+                <div class="col-md-3"><label class="form-label" for="medidas">Medidas</label>
+                  <input class="form-control" id="medidas" name="medidas" placeholder="Ej.: 2 × 1 m" aria-describedby="h-medidas"><div class="form-text" id="h-medidas">Si no sabes, déjalo vacío.</div></div>
+                <div class="col-12">
+                  <fieldset><legend class="form-label fs-6 fw-semibold">Material</legend>
+                    <div class="row g-2" id="materiales"></div></fieldset>
+                </div>
+              </div>
+            </section>
+
+            <!-- PASO 3 -->
+            <section data-step="3" hidden aria-labelledby="t3">
+              <h2 class="h4 mb-3" id="t3">Paso 3 de 4 · Detalles</h2>
+              <div class="row g-3">
+                <div class="col-12"><label class="form-label" for="archivo">Adjuntar archivo <span class="text-muted fw-normal">(logo o diseño, opcional)</span></label>
+                  <input class="form-control" id="archivo" name="archivo" type="file" accept=".pdf,.png,.jpg,.jpeg" aria-describedby="h-archivo e-archivo">
+                  <div class="form-text" id="h-archivo">PDF, PNG o JPG. Máximo 5 MB.</div><div class="invalid-feedback" id="e-archivo"></div></div>
+                <div class="col-md-6"><label class="form-label" for="tipoEvento">Tipo de evento <span class="text-muted fw-normal">(si aplica)</span></label>
+                  <select class="form-select" id="tipoEvento" name="tipoEvento"><option value="">No es para un evento</option></select></div>
+                <div class="col-md-6"><label class="form-label" for="fechaEvento">Fecha del evento o de entrega</label>
+                  <input class="form-control" id="fechaEvento" name="fechaEvento" type="date" aria-describedby="e-fecha"><div class="invalid-feedback" id="e-fecha">Elige una fecha de hoy en adelante.</div></div>
+                <div class="col-12"><label class="form-label" for="comentarios">Comentarios</label>
+                  <textarea class="form-control" id="comentarios" name="comentarios" rows="4" maxlength="500" aria-describedby="h-com"></textarea>
+                  <div class="form-text" id="h-com">Cuéntanos colores, textos o ideas. Máximo 500 caracteres.</div></div>
+              </div>
+            </section>
+
+            <!-- PASO 4 -->
+            <section data-step="4" hidden aria-labelledby="t4">
+              <h2 class="h4 mb-3" id="t4">Paso 4 de 4 · Resumen</h2>
+              <p>Revisa tus datos. Si algo está mal, vuelve con el botón “Atrás”.</p>
+              <div class="summary-box" id="resumen-final"></div>
+              <p class="small text-muted mt-3 mb-0">Los precios y plazos del sitio son referenciales. El precio final se confirma en la cotización personalizada.</p>
+            </section>
+
+            <div class="d-flex flex-wrap justify-content-between gap-2 mt-4">
+              <button type="button" class="btn btn-outline-primary" id="btn-atras" hidden><i class="bi bi-arrow-left" aria-hidden="true"></i> Atrás</button>
+              <div class="ms-auto d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-primary" id="btn-guardar"><i class="bi bi-save" aria-hidden="true"></i> Guardar borrador</button>
+                <button type="button" class="btn btn-primary" id="btn-sig">Siguiente <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                <button type="submit" class="btn btn-accent" id="btn-enviar" hidden><i class="bi bi-send" aria-hidden="true"></i> Enviar solicitud</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- CONFIRMACIÓN -->
+        <div id="vista-ok" hidden class="text-center py-4" tabindex="-1" aria-live="polite">
+          <i class="bi bi-check-circle-fill confirm-icon" aria-hidden="true"></i>
+          <h2 class="h3 mt-2">Solicitud enviada</h2>
+          <p class="mb-1">N.º de solicitud</p>
+          <p class="req-number" id="ok-numero">AP-0000</p>
+          <p><i class="bi bi-clock" aria-hidden="true"></i> Te responderemos en 24 a 48 horas hábiles.</p>
+          <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+            <a class="btn btn-accent" id="ok-estado" href="seguimiento.html">Ver estado de mi pedido</a>
+            <a class="btn btn-outline-primary" href="index.html"><i class="bi bi-house" aria-hidden="true"></i> Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="col-lg-4 d-none d-lg-block" aria-label="Resumen de tu solicitud">
+        <div class="summary-box position-sticky" style="top:90px">
+          <h2 class="h6 mb-3">Resumen de tu solicitud</h2>
+          <div id="resumen-lateral"></div>
+          <hr><p class="small mb-2"><strong>¿Necesitas ayuda?</strong></p>
+          <a class="btn btn-whatsapp btn-sm w-100" id="ayuda-wa" target="_blank" rel="noopener" href="#"><i class="bi bi-whatsapp" aria-hidden="true"></i> Pedir ayuda por WhatsApp</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/cotizar.js"></script>
+</body>
+</html>
