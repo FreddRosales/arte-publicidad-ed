@@ -183,6 +183,97 @@ main:focus { outline: none; }
 .wa-float { position: fixed; right: 16px; bottom: 16px; z-index: 1040; width: 56px; height: 56px; border-radius: 50%; background: #25D366; color: #0B3D1E; display: grid; place-items: center; font-size: 1.9rem; box-shadow: 0 6px 18px rgba(0, 0, 0, .3); }
 .wa-float:hover { color: #0B3D1E; background: #1FB958; }
 
+/* ---------- Opiniones: escala Likert de 5 puntos ---------- */
+.likert-item { border: 1px solid var(--ed-line); border-radius: var(--ed-radius); padding: .9rem 1rem 1rem; background: #fff; margin: 0 0 .9rem; }
+.likert-item legend { font: 600 1rem/1.35 'Open Sans', sans-serif; float: none; width: auto; padding: 0; margin-bottom: .6rem; }
+.likert-item.falta { border-color: var(--ed-red-aa); border-width: 2px; }
+.likert-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .4rem; }
+.likert-op { position: relative; flex-direction: column; gap: .1rem; min-height: 64px; padding: .4rem .2rem; text-align: center; line-height: 1.15; color: var(--ed-blue-dark); background: #fff; border: 2px solid var(--ed-blue); }
+.likert-op:hover { background: var(--ed-blue-soft); color: var(--ed-blue-dark); border-color: var(--ed-blue); }
+.likert-n { font: 700 1.15rem/1 'Poppins', sans-serif; }
+.likert-t { font-size: .72rem; font-weight: 600; }
+.btn-check:checked + .likert-op { background: var(--ed-blue); color: #fff; border-color: var(--ed-blue-dark); box-shadow: inset 0 0 0 2px #fff; }
+.btn-check:checked + .likert-op::after { content: '\2713'; position: absolute; top: 2px; right: 5px; font-size: .75rem; line-height: 1; }
+.btn-check:focus-visible + .likert-op { outline: 3px solid #FFB000; outline-offset: 2px; }
+.likert-ejes { display: flex; justify-content: space-between; gap: 1rem; font-size: .78rem; color: var(--ed-muted); margin-top: .35rem; }
+.opi-prom { font: 700 2.2rem/1 'Poppins', sans-serif; color: var(--ed-blue-dark); }
+.opi-item { border: 1px solid var(--ed-line); border-radius: 12px; padding: .75rem .9rem; background: #fff; }
+.opi-item blockquote { margin: .4rem 0 0; font-style: italic; overflow-wrap: anywhere; }
+.opi-barra { height: 14px; border-radius: 999px; background: var(--ed-line); overflow: hidden; }
+.opi-barra > span { display: block; height: 100%; background: var(--ed-blue); }
+
+/* ---------- Selector de daltonismo ---------- */
+.sel-dalt { width: auto; max-width: 100%; padding-right: 2rem; }
+
+/* ---------- Modos para daltonismo ----------
+   Dos estrategias combinadas:
+   1) Paleta segura para cada tipo (basada en Okabe-Ito) en lugar de rojo/verde o azul/amarillo.
+   2) Señales que NO dependen del color: enlaces subrayados, iconos en los estados y etiquetas de texto. */
+body.dalt-rv {
+  --ed-blue: #0072B2; --ed-blue-dark: #00507D; --ed-blue-soft: #E1F0F9;
+  --ed-red: #D55E00; --ed-red-aa: #B34700;
+  --bs-primary: #0072B2; --bs-primary-rgb: 0, 114, 178; --bs-link-color: #00507D; --bs-link-hover-color: #0072B2;
+}
+body.dalt-rv .estado-cotizado { background: #D6EAF7; color: #00406A; }
+body.dalt-rv .estado-aprobado { background: #C4E3F5; color: #00324F; }
+body.dalt-rv .estado-diseno { background: #FFF1C9; color: #5E4100; }
+body.dalt-rv .estado-produccion { background: #FFD9B8; color: #5C2A00; }
+body.dalt-rv .estado-entregado { background: #00507D; color: #fff; }
+body.dalt-rv .text-bg-success { background-color: #00507D !important; }
+body.dalt-rv .text-bg-danger { background-color: #8A3B00 !important; }
+body.dalt-rv .btn-accent { --bs-btn-hover-bg: #8A3B00; --bs-btn-hover-border-color: #8A3B00; --bs-btn-active-bg: #8A3B00; }
+body.dalt-rv .timeline li.current .tl-dot { box-shadow: 0 0 0 5px rgba(179, 71, 0, .25); }
+body.dalt-rv .cat-Estampados { background: linear-gradient(135deg, #B34700, #5C2A00); }
+
+body.dalt-az {
+  --ed-blue: #A4123F; --ed-blue-dark: #7A0C2E; --ed-blue-soft: #FBE9EF;
+  --ed-red: #00838A; --ed-red-aa: #00696B;
+  --bs-primary: #A4123F; --bs-primary-rgb: 164, 18, 63; --bs-link-color: #7A0C2E; --bs-link-hover-color: #A4123F;
+}
+body.dalt-az .estado-cotizado { background: #FBE0E8; color: #7A0C2E; }
+body.dalt-az .estado-aprobado { background: #D5EEEE; color: #004D4F; }
+body.dalt-az .estado-diseno { background: #EFE7D4; color: #4A3500; }
+body.dalt-az .estado-produccion { background: #F7D9D9; color: #6B1010; }
+body.dalt-az .estado-entregado { background: #004D4F; color: #fff; }
+body.dalt-az .text-bg-success { background-color: #004D4F !important; }
+body.dalt-az .text-bg-danger { background-color: #7A0C2E !important; }
+body.dalt-az .btn-accent { --bs-btn-hover-bg: #004D4F; --bs-btn-hover-border-color: #004D4F; --bs-btn-active-bg: #004D4F; }
+body.dalt-az .timeline li.current .tl-dot { box-shadow: 0 0 0 5px rgba(0, 105, 107, .25); }
+body.dalt-az .cat-Impresión, body.dalt-az .work-img { background: linear-gradient(135deg, #A4123F, #5C0A24); }
+body.dalt-az .cat-Estampados { background: linear-gradient(135deg, #00696B, #003A3B); }
+
+body.dalt-mono {
+  --ed-blue: #3A3A3A; --ed-blue-dark: #111; --ed-blue-soft: #EDEDED;
+  --ed-red: #000; --ed-red-aa: #000;
+  --bs-primary: #3A3A3A; --bs-primary-rgb: 58, 58, 58; --bs-link-color: #111; --bs-link-hover-color: #000;
+}
+body.dalt-mono .estado-recibida { background: #EDEDED; color: #000; }
+body.dalt-mono .estado-cotizado { background: #D9D9D9; color: #000; }
+body.dalt-mono .estado-aprobado { background: #BDBDBD; color: #000; }
+body.dalt-mono .estado-diseno { background: #9E9E9E; color: #000; }
+body.dalt-mono .estado-produccion { background: #5E5E5E; color: #fff; }
+body.dalt-mono .estado-entregado { background: #000; color: #fff; }
+body.dalt-mono .text-bg-success { background-color: #1A1A1A !important; }
+body.dalt-mono .text-bg-danger { background-color: #000 !important; }
+body.dalt-mono .btn-accent { --bs-btn-hover-bg: #333; --bs-btn-hover-border-color: #333; --bs-btn-active-bg: #333; border-width: 3px; border-style: double; }
+body.dalt-mono .timeline li.current .tl-dot { box-shadow: 0 0 0 5px rgba(0, 0, 0, .25); }
+body.dalt-mono .work-img, body.dalt-mono .cat-Impresión, body.dalt-mono .cat-Estampados { background: linear-gradient(135deg, #3A3A3A, #111); }
+body.dalt-mono .cal-day.nodisp { background: repeating-linear-gradient(45deg, #fff, #fff 5px, #D9D9D9 5px, #D9D9D9 10px); color: #000; border-color: #000; }
+
+/* Señales que no dependen del color (todos los modos de daltonismo) */
+body.dalt main a:not(.btn):not(.nav-link):not(.navbar-brand):not(.req-item) { text-decoration: underline; text-underline-offset: 2px; }
+body.dalt .badge.estado { border: 1px solid currentColor; }
+body.dalt .badge.estado::before { font-family: 'bootstrap-icons'; font-weight: 400; margin-right: .35em; vertical-align: -.1em; }
+body.dalt .estado-recibida::before { content: '\f42d'; }
+body.dalt .estado-cotizado::before { content: '\f50f'; }
+body.dalt .estado-aprobado::before { content: '\f407'; }
+body.dalt .estado-diseno::before { content: '\f4cb'; }
+body.dalt .estado-produccion::before { content: '\f3e5'; }
+body.dalt .estado-entregado::before { content: '\f26a'; }
+body.dalt .timeline li.current .tl-dot { outline: 3px solid currentColor; outline-offset: 2px; }
+body.dalt .likert-item.falta { border-style: dashed; }
+body.dalt .btn-check:checked + .likert-op { text-decoration: underline; }
+
 /* ---------- Modo de alto contraste ---------- */
 body.alto-contraste { --ed-bg: #000; --ed-ink: #fff; --ed-muted: #E6E6E6; --ed-line: #fff; --ed-surface: #111; --ed-blue-soft: #0A0A0A; --bs-body-color: #fff; --bs-link-color: #7CC4FF; --bs-link-hover-color: #fff; background: #000; color: #fff; }
 body.alto-contraste .site-header, body.alto-contraste .navbar, body.alto-contraste .hero, body.alto-contraste .service-card, body.alto-contraste .work-card,
@@ -220,3 +311,12 @@ body.alto-contraste .hero-art, body.alto-contraste .login-art { background: #111
 /* Imagen del login */
 .login-art { position: relative; padding: 0 !important; min-height: 320px; }
 .login-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Alto contraste: opiniones (Likert) */
+body.alto-contraste .likert-item, body.alto-contraste .opi-item { background: #000 !important; color: #fff !important; border-color: #fff !important; }
+body.alto-contraste .likert-op { background: #000; color: #fff; border-color: #fff; }
+body.alto-contraste .likert-op:hover { background: #222; color: #fff; }
+body.alto-contraste .btn-check:checked + .likert-op { background: #FFE600; color: #000; border-color: #FFE600; box-shadow: inset 0 0 0 2px #000; }
+body.alto-contraste .opi-barra { background: #333; }
+body.alto-contraste .opi-barra > span { background: #FFE600; }
+body.alto-contraste .opi-prom { color: #FFE600; }
+body.alto-contraste .sel-dalt { background-color: #000; color: #fff; border-color: #fff; }

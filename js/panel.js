@@ -189,6 +189,39 @@ document.addEventListener('DOMContentLoaded', () => {
     pintarCatalogo(); toast('Trabajo publicado en el catálogo.');
   });
 
-  function refrescar() { pintarResumen(); pintarSolicitudes(); pintarClientes(); pintarCatalogo(); }
+  /* ---------- Opiniones (escala Likert) ---------- */
+  function pintarOpiniones() {
+    const ops = ED.getOpiniones();
+    const n = ops.length;
+    const promGlobal = n ? ops.reduce((a, o) => a + ED.promedioOpinion(o), 0) / n : 0;
+    const conComentario = ops.filter((o) => o.comentario).length;
+    const kpi = (num, t) => `<div class="col-6 col-lg-4"><div class="kpi"><div class="kpi-num">${num}</div><div>${t}</div></div></div>`;
+    document.getElementById('opi-kpis').innerHTML =
+      kpi(String(n).padStart(2, '0'), 'Opiniones recibidas') +
+      kpi(n ? promGlobal.toFixed(1) : '—', 'Promedio general (de 5)') +
+      kpi(String(conComentario).padStart(2, '0'), 'Con comentarios');
+
+    document.getElementById('opi-promedios').innerHTML = n ? ED.LIKERT_ITEMS.map((it) => {
+      const vals = ops.map((o) => Number(o.respuestas[it.id])).filter((v) => v >= 1 && v <= 5);
+      const prom = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+      const pct = Math.round((prom / 5) * 100);
+      return `<div class="mb-3">
+        <div class="d-flex justify-content-between gap-2 small mb-1"><span>${ED.esc(it.texto)}</span><span class="text-nowrap"><strong>${prom.toFixed(1)}</strong> / 5</span></div>
+        <div class="opi-barra" role="progressbar" aria-label="${ED.esc(it.texto)}" aria-valuenow="${prom.toFixed(1)}" aria-valuemin="1" aria-valuemax="5"><span style="width:${pct}%"></span></div>
+      </div>`;
+    }).join('') : '<p class="text-muted mb-0">Aún no hay opiniones.</p>';
+
+    const conTexto = [...ops].reverse().filter((o) => o.comentario);
+    document.getElementById('opi-comentarios').innerHTML = conTexto.length ? conTexto.map((o) => `
+      <li class="opi-item">
+        <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+          <span><strong>${ED.esc(o.nombre || 'Anónimo')}</strong> · <small class="text-muted">${ED.fmtDate(o.fecha)}</small></span>
+          <span><span class="badge text-bg-light border">${ED.esc(o.tipo)}</span> <span class="badge text-bg-light border">${ED.promedioOpinion(o).toFixed(1)} / 5</span></span>
+        </div>
+        <blockquote>“${ED.esc(o.comentario)}”</blockquote>
+      </li>`).join('') : '<li class="text-muted">Todavía no hay comentarios escritos.</li>';
+  }
+
+  function refrescar() { pintarResumen(); pintarSolicitudes(); pintarClientes(); pintarCatalogo(); pintarOpiniones(); }
   refrescar();
 });
