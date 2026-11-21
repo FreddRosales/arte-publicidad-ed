@@ -143,6 +143,42 @@ const ED = (() => {
     return (d.getDate() * 7 + d.getMonth() * 3) % 5 !== 0;
   };
 
+  /* ---------- Opiniones (escala Likert de 5 puntos) ---------- */
+  const LIKERT_ESCALA = [
+    { v: 1, t: 'Muy en desacuerdo' }, { v: 2, t: 'En desacuerdo' }, { v: 3, t: 'Neutral' },
+    { v: 4, t: 'De acuerdo' }, { v: 5, t: 'Muy de acuerdo' }
+  ];
+  const LIKERT_ITEMS = [
+    { id: 'facil', texto: 'Encontré fácilmente lo que buscaba en el sitio.' },
+    { id: 'claro', texto: 'La información de los servicios y materiales es clara y fácil de entender.' },
+    { id: 'cotizar', texto: 'Pedir una cotización me pareció sencillo.' },
+    { id: 'diseno', texto: 'El diseño del sitio (colores, textos e imágenes) es agradable y se lee bien.' },
+    { id: 'acces', texto: 'Las opciones de accesibilidad (letra, contraste, daltonismo) me resultaron útiles.' },
+    { id: 'global', texto: 'En general, estoy satisfecho(a) con el sitio.' }
+  ];
+  const TIPOS_OPINION = ['Sugerencia', 'Felicitación', 'Problema en el sitio', 'Consulta'];
+  const KEY_OPI = 'ed_opiniones_v1';
+
+  const seedOpiniones = () => ([
+    { id: 'OP-0001', fecha: addDays(-6), nombre: 'Claudia Llanos', tipo: 'Felicitación', respuestas: { facil: 5, claro: 4, cotizar: 5, diseno: 4, acces: 5, global: 5 }, comentario: 'Pedí mi cotización en pocos minutos y me respondieron rápido.' },
+    { id: 'OP-0002', fecha: addDays(-3), nombre: 'Juan Perez', tipo: 'Sugerencia', respuestas: { facil: 4, claro: 3, cotizar: 4, diseno: 4, acces: 4, global: 4 }, comentario: 'Sería útil ver precios referenciales de cada material.' },
+    { id: 'OP-0003', fecha: addDays(-1), nombre: '', tipo: 'Problema en el sitio', respuestas: { facil: 3, claro: 4, cotizar: 2, diseno: 4, acces: 3, global: 3 }, comentario: 'En el celular el calendario se ve algo pequeño.' }
+  ]);
+  const promedioOpinion = (o) => {
+    const v = LIKERT_ITEMS.map((i) => Number(o.respuestas[i.id])).filter((n) => n >= 1 && n <= 5);
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0;
+  };
+  const getOpiniones = () => {
+    let o = store.get(KEY_OPI, null);
+    if (!o) { o = seedOpiniones(); store.set(KEY_OPI, o); }
+    return o;
+  };
+  const saveOpiniones = (o) => store.set(KEY_OPI, o);
+  const nextOpinionId = () => {
+    const max = getOpiniones().reduce((m, o) => Math.max(m, parseInt(String(o.id).replace(/\D/g, ''), 10) || 0), 0);
+    return `OP-${String(max + 1).padStart(4, '0')}`;
+  };
+
   /* Sesión de personal (solo demostración; NO es seguridad real) */
   const USUARIOS = {
     admin: { pass: 'admin123', rol: 'admin', nombre: 'Eberth' },
@@ -161,6 +197,7 @@ const ED = (() => {
     SERVICIOS, MATERIALES, TIPOS_EVENTO,
     getRequests, saveRequests, nextId, normalizeId,
     getCatalog, saveCatalog, getClients, fechaDisponible,
+    LIKERT_ESCALA, LIKERT_ITEMS, TIPOS_OPINION, getOpiniones, saveOpiniones, nextOpinionId, promedioOpinion,
     USUARIOS, KEY_USER, getUser, requireRole
   };
 })();

@@ -15,7 +15,7 @@ const I18N = {
     'nav.pedido': 'Mi pedido', 'nav.eventos': 'Fechas', 'nav.nosotros': 'Nosotros',
     'nav.pedir': 'Pedir cotización', 'nav.personal': 'Personal', 'nav.login': 'Acceso personal', 'nav.panel': 'Mi panel',
     'foot.tel': 'Teléfono', 'foot.ubic': 'Ubicación', 'foot.reclamos': 'Libro de reclamaciones',
-    'foot.lema': 'Diseño, impresión y publicidad a tu medida.',
+    'foot.lema': 'Diseño, impresión y publicidad a tu medida.', 'foot.opinar': 'Danos tu opinión',
     'home.titulo': 'Tu Idea Merece Verse en Grande.',
     'home.sub': 'Diseño gráfico, impresión publicitaria, letreros, estampados, fotografía y video en Bambamarca. Cuéntanos qué necesitas y te respondemos en 24 a 48 horas hábiles.',
     'home.cta1': 'Pedir cotización', 'home.cta2': 'Ver trabajos',
@@ -28,7 +28,7 @@ const I18N = {
     'nav.pedido': 'My order', 'nav.eventos': 'Dates', 'nav.nosotros': 'About us',
     'nav.pedir': 'Request a quote', 'nav.personal': 'Staff', 'nav.login': 'Staff login', 'nav.panel': 'My panel',
     'foot.tel': 'Phone', 'foot.ubic': 'Location', 'foot.reclamos': 'Complaints book',
-    'foot.lema': 'Design, printing and advertising made to measure.',
+    'foot.lema': 'Design, printing and advertising made to measure.', 'foot.opinar': 'Give us your feedback',
     'home.titulo': 'Your Idea Deserves to be Seen Big.',
     'home.sub': 'Graphic design, advertising print, signs, custom apparel, photo and video in Bambamarca. Tell us what you need and we will reply within 24 to 48 business hours.',
     'home.cta1': 'Request a quote', 'home.cta2': 'See our work',
@@ -40,12 +40,18 @@ const I18N = {
 /* ---------- Preferencias de accesibilidad ---------- */
 const Prefs = (() => {
   const KEY = 'ed_prefs';
-  let p = ED.store.get(KEY, null) || { fs: 100, hc: false, lang: 'es' };
+  let p = ED.store.get(KEY, null) || { fs: 100, hc: false, lang: 'es', cb: 'none' };
+  if (!p.cb) p.cb = 'none'; // preferencias guardadas antes de añadir daltonismo
   const save = () => ED.store.set(KEY, p);
   const apply = () => {
     document.documentElement.style.fontSize = `${p.fs}%`;
     document.body.classList.toggle('alto-contraste', p.hc);
     document.documentElement.lang = p.lang;
+    ['rv', 'az', 'mono'].forEach((m) => document.body.classList.remove(`dalt-${m}`));
+    document.body.classList.toggle('dalt', p.cb !== 'none');
+    if (p.cb !== 'none') document.body.classList.add(`dalt-${p.cb}`);
+    const selCb = document.getElementById('sel-dalt');
+    if (selCb) selCb.value = p.cb;
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const t = I18N[p.lang][el.dataset.i18n];
       if (t) el.textContent = t;
@@ -62,6 +68,7 @@ const Prefs = (() => {
     smaller() { p.fs = Math.max(80, p.fs - 10); save(); apply(); },
     reset() { p.fs = 100; save(); apply(); },
     toggleContrast() { p.hc = !p.hc; save(); apply(); },
+    setColorblind(v) { p.cb = ['rv', 'az', 'mono'].includes(v) ? v : 'none'; save(); apply(); },
     toggleLang() { p.lang = p.lang === 'es' ? 'en' : 'es'; save(); apply(); }
   };
 })();
@@ -87,6 +94,13 @@ function a11yBar() {
       <button type="button" class="btn btn-sm btn-a11y" id="btn-normal" aria-label="Tamaño de letra normal">A</button>
       <button type="button" class="btn btn-sm btn-a11y" id="btn-mas" aria-label="Aumentar tamaño de letra">A+</button>
       <button type="button" class="btn btn-sm btn-a11y" id="btn-contraste" aria-pressed="false"><i class="bi bi-circle-half" aria-hidden="true"></i> Contraste</button>
+      <label class="visually-hidden" for="sel-dalt">Modo para daltonismo</label>
+      <select class="form-select form-select-sm btn-a11y sel-dalt" id="sel-dalt">
+        <option value="none">Daltonismo: ninguno</option>
+        <option value="rv">Rojo-verde (protanopia / deuteranopia)</option>
+        <option value="az">Azul-amarillo (tritanopia)</option>
+        <option value="mono">Monocromático (acromatopsia)</option>
+      </select>
       <button type="button" class="btn btn-sm btn-a11y" id="btn-idioma">EN</button>
     </div>
   </div>`;
@@ -168,6 +182,9 @@ function renderFooter(layout) {
           <button type="button" class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modalReclamos">
             <i class="bi bi-book" aria-hidden="true"></i> <span data-i18n="foot.reclamos">Libro de reclamaciones</span>
           </button>
+          <a class="btn btn-outline-light w-100 mt-2" href="opinion.html">
+            <i class="bi bi-chat-heart" aria-hidden="true"></i> <span data-i18n="foot.opinar">Danos tu opinión</span>
+          </a>
         </div>
       </div>
       <hr class="border-light opacity-25 my-3">
@@ -276,5 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
   on('btn-normal', () => Prefs.reset());
   on('btn-contraste', () => Prefs.toggleContrast());
   on('btn-idioma', () => Prefs.toggleLang());
+  const selDalt = document.getElementById('sel-dalt');
+  if (selDalt) selDalt.addEventListener('change', () => Prefs.setColorblind(selDalt.value));
   Prefs.init();
 });
