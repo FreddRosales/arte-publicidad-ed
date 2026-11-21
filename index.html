@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · Arte y Publicidad E&amp;D</title>
+  <meta name="description" content="Diseño gráfico, impresión publicitaria, letreros, estampados, fotografía y video en Bambamarca.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body data-page="inicio">
+  <div id="site-header"></div>
+
+  <main id="contenido" tabindex="-1">
+    <section class="hero">
+      <div class="container py-5">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <p class="text-uppercase fw-bold small mb-2" style="letter-spacing:.12em;color:var(--ed-red-aa)">Bambamarca · Hualgayoc</p>
+            <h1 class="mb-3" data-i18n="home.titulo">Tu idea merece verse en grande.</h1>
+            <p class="lead mb-4" data-i18n="home.sub">Diseño gráfico, impresión publicitaria, letreros, estampados, fotografía y video en Bambamarca. Cuéntanos qué necesitas y te respondemos en 24 a 48 horas hábiles.</p>
+            <div class="d-flex flex-wrap gap-2">
+              <a class="btn btn-accent btn-lg" href="cotizar.html" data-i18n="home.cta1">Pedir cotización</a>
+              <a class="btn btn-outline-primary btn-lg" href="catalogo.html" data-i18n="home.cta2">Ver trabajos</a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <img src="assets/img/BannerBienveida.jpg" class="nosotros-foto" alt="Foto Bienvenida">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5" id="servicios" aria-labelledby="h-serv">
+      <h2 class="section-title mb-1" id="h-serv" data-i18n="home.servicios">Nuestros servicios</h2>
+      <p class="text-muted mb-4">Elige una categoría para ver ejemplos o pedir tu cotización.</p>
+      <div class="row g-3" id="lista-servicios"></div>
+    </section>
+
+    <section class="container pb-5" aria-labelledby="h-rec">
+      <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+        <h2 class="section-title mb-0" id="h-rec" data-i18n="home.recientes">Nuevos trabajos</h2>
+        <a href="catalogo.html" data-i18n="home.vermas">Ver todo el catálogo</a>
+      </div>
+      <div class="row g-3" id="lista-recientes"></div>
+    </section>
+
+    <section class="container pb-5" aria-labelledby="h-como">
+      <h2 class="section-title mb-3" id="h-como">¿Cómo funciona?</h2>
+      <ol class="row g-3 list-unstyled">
+        <li class="col-md-4"><div class="panel-card h-100"><p class="req-number mb-1">1</p><h3 class="h5">Cuéntanos qué necesitas</h3><p class="mb-0">Llena el formulario en 4 pasos sencillos. Te ayudamos a elegir el material.</p></div></li>
+        <li class="col-md-4"><div class="panel-card h-100"><p class="req-number mb-1">2</p><h3 class="h5">Recibe tu cotización</h3><p class="mb-0">Te respondemos en 24 a 48 horas hábiles. Los precios del sitio son referenciales.</p></div></li>
+        <li class="col-md-4"><div class="panel-card h-100"><p class="req-number mb-1">3</p><h3 class="h5">Sigue tu pedido</h3><p class="mb-0">Con tu número de solicitud ves en qué etapa está, sin llamar ni ir al local.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="container">
+      <div class="cta-band p-4 p-md-5 d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <h2 class="h3 mb-0" data-i18n="home.cierre">Hagamos realidad tu próximo proyecto.</h2>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-light" href="cotizar.html" data-i18n="nav.pedir">Pedir cotización</a>
+          <a class="btn btn-outline-light" href="#" id="cta-wa" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/inicio.js"></script>
+</body>
+</html>
