@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function abrir(id) {
     const o = obras.find((x) => x.id === Number(id));
     if (!o) return;
+    if (ED.track) ED.track('obra', o.titulo);
     document.getElementById('obraTitulo').textContent = o.titulo;
     document.getElementById('obraCuerpo').innerHTML = `
       ${ED.ui.placeholder(o, 'lg rounded-3 mb-3')}

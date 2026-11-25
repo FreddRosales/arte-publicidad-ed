@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Panel administrativo · Arte y Publicidad E&amp;D</title>
-  <meta name="description" content="Resumen de solicitudes, clientes y catálogo.">
+  <meta name="description" content="Resumen de solicitudes, analítica web, clientes, catálogo y opiniones.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -22,6 +22,7 @@
 
     <ul class="nav nav-pills gap-1 mb-4 flex-wrap" id="pestanas" role="tablist">
       <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-resumen" type="button" role="tab" aria-selected="true">Resumen</button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-analitica" type="button" role="tab" aria-selected="false"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Analítica web</button></li>
       <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-solicitudes" type="button" role="tab" aria-selected="false">Solicitudes</button></li>
       <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-clientes" type="button" role="tab" aria-selected="false">Clientes</button></li>
       <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-catalogo" type="button" role="tab" aria-selected="false">Catálogo</button></li>
@@ -32,10 +33,42 @@
       <!-- RESUMEN -->
       <div class="tab-pane fade show active" id="tab-resumen" role="tabpanel">
         <div class="row g-3 mb-3" id="kpis"></div>
+        <div class="row g-3 mb-3">
+          <div class="col-lg-7" id="graf-estado"></div>
+          <div class="col-lg-5" id="graf-servicio"></div>
+        </div>
         <div class="row g-3">
-          <div class="col-lg-7"><section class="panel-card h-100" aria-labelledby="h-prog"><h2 class="h6 mb-3" id="h-prog">Pedidos por estado</h2><div id="barras"></div></section></div>
+          <div class="col-lg-7" id="graf-tiempo"></div>
           <div class="col-lg-5"><section class="panel-card h-100" aria-labelledby="h-pend"><h2 class="h6 mb-3" id="h-pend">Próximas por atender (orden de llegada)</h2><ul class="list-req" id="pendientes"></ul></section></div>
         </div>
+      </div>
+
+      <div class="tab-pane fade" id="tab-analitica" role="tabpanel">
+        <section class="panel-card mb-3" aria-labelledby="h-an-ctrl">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+              <h2 class="h6 mb-1" id="h-an-ctrl">Analítica del sitio web</h2>
+              <p class="small text-muted mb-0" id="an-estado" aria-live="polite"></p>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <div class="btn-group" role="group" aria-label="Periodo a analizar">
+                <input type="radio" class="btn-check" name="an-rango" id="an-r7" value="7"><label class="btn btn-outline-primary btn-sm" for="an-r7">7 días</label>
+                <input type="radio" class="btn-check" name="an-rango" id="an-r14" value="14" checked><label class="btn btn-outline-primary btn-sm" for="an-r14">14 días</label>
+                <input type="radio" class="btn-check" name="an-rango" id="an-r30" value="30"><label class="btn btn-outline-primary btn-sm" for="an-r30">30 días</label>
+              </div>
+              <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" role="switch" id="an-demo" checked>
+                <label class="form-check-label small" for="an-demo">Incluir datos de muestra</label>
+              </div>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="an-csv"><i class="bi bi-download" aria-hidden="true"></i> Descargar CSV</button>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="an-borrar"><i class="bi bi-trash" aria-hidden="true"></i> Borrar datos reales</button>
+            </div>
+          </div>
+          <p class="small text-muted mt-3 mb-0"><i class="bi bi-info-circle" aria-hidden="true"></i> El prototipo no tiene servidor: cada visita se guarda solo en este navegador. Los datos de muestra simulan el movimiento de un negocio local para poder mostrar el panel; apágalos para ver únicamente lo que tú registres navegando por el sitio.</p>
+        </section>
+        <div class="alert alert-info" id="an-vacio" role="status" hidden>Aún no hay visitas registradas. Navega por las páginas públicas del sitio (Inicio, Catálogo, Cotizar…) y vuelve aquí, o activa los datos de muestra.</div>
+        <div class="row g-3 mb-3" id="an-kpis"></div>
+        <div id="an-graficos"></div>
       </div>
 
       <!-- SOLICITUDES -->
@@ -100,8 +133,12 @@
   <div id="site-footer"></div>
 
   <script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="vendor/chartjs/chart.umd.min.js"></script>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/analitica.js"></script>
+  <script src="js/dashboard.js"></script>
   <script src="js/panel.js"></script>
+  <script src="js/animaciones.js"></script>
 </body>
 </html>
