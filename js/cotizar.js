@@ -181,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const todas = ED.getRequests(); todas.push(req); ED.saveRequests(todas);
     ED.store.remove(KEY_BORRADOR);
+    if (ED.track) ED.track('cot_env', req.servicio);
     document.getElementById('ok-numero').textContent = req.id;
     document.getElementById('ok-estado').href = `seguimiento.html?n=${req.id}`;
     document.getElementById('vista-form').hidden = true;

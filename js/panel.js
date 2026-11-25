@@ -20,18 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function pintarResumen() {
     const todas = ED.getRequests();
     const cuenta = (...ids) => todas.filter((r) => ids.includes(r.estado)).length;
-    const kpi = (n, t) => `<div class="col-6 col-lg-3"><div class="kpi"><div class="kpi-num">${String(n).padStart(2, '0')}</div><div>${t}</div></div></div>`;
+    const kpi = (n, t) => `<div class="col-6 col-lg-3"><div class="kpi"><div class="kpi-num" data-count="${n}" data-pad="2">${String(n).padStart(2, '0')}</div><div>${t}</div></div></div>`;
     document.getElementById('kpis').innerHTML =
       kpi(cuenta('recibida'), 'Recibidas') + kpi(cuenta('cotizado'), 'Cotizadas') +
       kpi(cuenta('diseno', 'produccion'), 'En diseño o producción') + kpi(cuenta('entregado'), 'Entregadas');
 
-    const total = todas.length || 1;
-    document.getElementById('barras').innerHTML = [ED.RECIBIDA, ...ED.ESTADOS].map((e) => {
-      const n = cuenta(e.id);
-      const pct = Math.round((n / total) * 100);
-      return `<div class="mb-3"><div class="d-flex justify-content-between small mb-1"><span>${e.label}</span><span><strong>${n}</strong> de ${todas.length}</span></div>
-        <div class="progress" role="progressbar" aria-label="${e.label}" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${pct}%"></div></div></div>`;
-    }).join('');
+    document.getElementById('graf-estado').innerHTML = Dashboard.caja('estado', 'Pedidos por estado', 'Cantidad de solicitudes en cada etapa del proceso.');
+    document.getElementById('graf-servicio').innerHTML = Dashboard.caja('servicio', 'Solicitudes por servicio', 'Qué servicios se piden más.');
+    document.getElementById('graf-tiempo').innerHTML = Dashboard.caja('tiempo-sol', 'Solicitudes recibidas', 'Cuántas solicitudes llegaron cada día, en las últimas dos semanas.');
+    Dashboard.negocio();
+    ED.anim.contarTodos(document.getElementById('kpis'));
 
     const pend = ordenLlegada().filter((r) => ['recibida', 'cotizado'].includes(r.estado)).slice(0, 5);
     document.getElementById('pendientes').innerHTML = pend.length
@@ -195,21 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const n = ops.length;
     const promGlobal = n ? ops.reduce((a, o) => a + ED.promedioOpinion(o), 0) / n : 0;
     const conComentario = ops.filter((o) => o.comentario).length;
-    const kpi = (num, t) => `<div class="col-6 col-lg-4"><div class="kpi"><div class="kpi-num">${num}</div><div>${t}</div></div></div>`;
+    const kpi = (num, t, extra = '') => `<div class="col-6 col-lg-4"><div class="kpi"><div class="kpi-num" ${extra}>${num}</div><div>${t}</div></div></div>`;
     document.getElementById('opi-kpis').innerHTML =
-      kpi(String(n).padStart(2, '0'), 'Opiniones recibidas') +
-      kpi(n ? promGlobal.toFixed(1) : '—', 'Promedio general (de 5)') +
-      kpi(String(conComentario).padStart(2, '0'), 'Con comentarios');
+      kpi(String(n).padStart(2, '0'), 'Opiniones recibidas', `data-count="${n}" data-pad="2"`) +
+      kpi(n ? promGlobal.toFixed(1) : '—', 'Promedio general (de 5)', n ? `data-count="${promGlobal.toFixed(1)}" data-dec="1"` : '') +
+      kpi(String(conComentario).padStart(2, '0'), 'Con comentarios', `data-count="${conComentario}" data-pad="2"`);
 
-    document.getElementById('opi-promedios').innerHTML = n ? ED.LIKERT_ITEMS.map((it) => {
-      const vals = ops.map((o) => Number(o.respuestas[it.id])).filter((v) => v >= 1 && v <= 5);
-      const prom = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
-      const pct = Math.round((prom / 5) * 100);
-      return `<div class="mb-3">
-        <div class="d-flex justify-content-between gap-2 small mb-1"><span>${ED.esc(it.texto)}</span><span class="text-nowrap"><strong>${prom.toFixed(1)}</strong> / 5</span></div>
-        <div class="opi-barra" role="progressbar" aria-label="${ED.esc(it.texto)}" aria-valuenow="${prom.toFixed(1)}" aria-valuemin="1" aria-valuemax="5"><span style="width:${pct}%"></span></div>
-      </div>`;
-    }).join('') : '<p class="text-muted mb-0">Aún no hay opiniones.</p>';
+    document.getElementById('opi-promedios').innerHTML = n
+      ? Dashboard.grafico('opi', 'Promedio de cada afirmación, de 1 a 5. Los datos están en la tabla debajo del gráfico.')
+      : '<p class="text-muted mb-0">Aún no hay opiniones.</p>';
+    if (n) Dashboard.opiniones();
 
     const conTexto = [...ops].reverse().filter((o) => o.comentario);
     document.getElementById('opi-comentarios').innerHTML = conTexto.length ? conTexto.map((o) => `
@@ -224,4 +217,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function refrescar() { pintarResumen(); pintarSolicitudes(); pintarClientes(); pintarCatalogo(); pintarOpiniones(); }
   refrescar();
+  Dashboard.iniciar();
 });
